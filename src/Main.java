@@ -11,7 +11,7 @@ public class Main {
     public static void main(String [] args){
 
 
-        String url = "jdbc:postgresql://localhost/ovchip?user=postgres&password=postgres";
+        String url = "jdbc:postgresql://localhost/ovchip?user=postgres&password=jaloe43287990";
         try {
             Connection conn = DriverManager.getConnection(url);
             ReizigerDAO rdao = new ReizigerDAOPsql(conn);
@@ -55,5 +55,15 @@ public class Main {
         System.out.println(reizigers.size() + " reizigers\n");
 
         // Voeg aanvullende tests van de ontbrekende CRUD-operaties in.
+        sietske.setVoorletters("M");
+        System.out.println("[Test] update "+ rdao.update(sietske));
+        System.out.println(reizigers.size() + " reizigers\n");
+
+
+        for(Reiziger i: rdao.findAll()){
+            if(i.getId()==1){
+                System.out.println("Test DELETE"+ rdao.delete(i));
+            }
+        }
     }
 }

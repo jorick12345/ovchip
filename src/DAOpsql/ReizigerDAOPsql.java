@@ -38,21 +38,57 @@ public class ReizigerDAOPsql implements ReizigerDAO {
         }catch (SQLException ex){
             System.err.println("error "+ex.getMessage());
         }
-        return false;
+        return true;
     }
 
     @Override
     public boolean update(Reiziger reiziger) {
-        return false;
+        try{
+                    String query = "UPDATE reiziger SET reiziger_id=?, voorletters=?,"+
+                            " tussenvoegsel=?, achternaam=?, geboortedatum=?  WHERE reiziger_id=?";
+                    PreparedStatement pst = connection.prepareStatement(query);
+                    pst.setInt(1,reiziger.getId());
+                    pst.setString(2,reiziger.getVoorletters());
+                    pst.setString(3, reiziger.getTussenvoegsel());
+                    pst.setString(4, reiziger.getAchternaam());
+
+                    java.sql.Date sqlDate = new java.sql.Date(reiziger.getGeboortedatum().getTime());
+                    pst.setDate(5,sqlDate);
+                    pst.setInt(6,reiziger.getId());
+
+                    ResultSet rs = pst.executeQuery();
+                    pst.close();
+                    rs.close();
+        }catch (SQLException ex){
+            System.err.println("error"+ex.getMessage());
+        }
+        return true;
     }
 
     @Override
     public boolean delete(Reiziger reiziger) {
-        return false;
+        try{
+
+            String query = "DELETE FROM reiziger WHERE reiziger_id=?";
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setInt(1,reiziger.getId());
+
+            ResultSet rs = pst.executeQuery();
+            pst.close();
+            rs.close();
+
+        }catch (SQLException ex){
+            System.err.println("error"+ex.getMessage());
+        }
+
+        return true;
     }
 
     @Override
     public Reiziger findById(int id) {
+
+
+
         return null;
     }
 
