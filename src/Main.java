@@ -1,6 +1,9 @@
 
+import DAO.AdressDAO;
 import DAO.ReizigerDAO;
+import DAOpsql.AdressDAOPsql;
 import DAOpsql.ReizigerDAOPsql;
+import Domein.Adress;
 import Domein.Reiziger;
 
 import java.sql.*;
@@ -15,7 +18,9 @@ public class Main {
         try {
             Connection conn = DriverManager.getConnection(url);
             ReizigerDAO rdao = new ReizigerDAOPsql(conn);
-            testReizigerDAO(rdao);
+
+            AdressDAO adao = new AdressDAOPsql(conn);
+            testReizigerDAO(rdao,adao);
 
             conn.close();
 
@@ -35,7 +40,7 @@ public class Main {
      *
      * @throws SQLException
      */
-    private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
+    private static void testReizigerDAO(ReizigerDAO rdao,AdressDAO adao) throws SQLException {
         System.out.println("\n---------- Test ReizigerDAO -------------");
 
         // Haal alle reizigers op uit de database
@@ -48,22 +53,32 @@ public class Main {
 
         // Maak een nieuwe reiziger aan en persisteer deze in de database
         String gbdatum = "1981-03-14";
-        Reiziger sietske = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
+        Adress adress1 = new Adress(6,"2266ca","65","hoi","amsterdam",6);
+        Reiziger sietske = new Reiziger(6, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
         System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.save() ");
-        rdao.save(sietske);
-        reizigers = rdao.findAll();
-        System.out.println(reizigers.size() + " reizigers\n");
 
+        rdao.save(sietske);
+        adao.save(adress1);
+        List<Reiziger> reizigers2 = rdao.findAll();
+        System.out.println(reizigers2.size() + " reizigers\n");
+//
         // Voeg aanvullende tests van de ontbrekende CRUD-operaties in.
         sietske.setVoorletters("M");
         System.out.println("[Test] update "+ rdao.update(sietske));
         System.out.println(reizigers.size() + " reizigers\n");
 
+        List<Reiziger> reizigers3 = rdao.findAll();
+        List<Adress> adresses = adao.findAll();
+        for(Adress a: adresses){
+            if(a.getReizigerId()==1){
+                System.out.println("Test DELETE"+ adao.delete(a));
 
-        for(Reiziger i: rdao.findAll()){
+            }
+        }
+        for(Reiziger i: reizigers3){
             if(i.getId()==1){
                 System.out.println("Test DELETE"+ rdao.delete(i));
-            }
+                }
         }
     }
 }

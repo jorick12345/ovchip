@@ -11,6 +11,8 @@ public class Reiziger {
     private String achternaam;
     private Date geboortedatum;
 
+    private Adress adress;
+
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
         this.id = id;
         this.voorletters = voorletters;
@@ -59,11 +61,27 @@ public class Reiziger {
         this.geboortedatum = geboortedatum;
     }
 
+    public void setAdress(Adress adress) {
+        this.adress = adress;
+    }
+
+    public Adress getAdress() {
+        return adress;
+    }
+
     public String toString(){
+        String s = "";
+        if(getAdress()==null){
+            s = "reiziger "+ getId()+" : "+ getVoorletters()+" "+getTussenvoegsel()+" "+getAchternaam()+" geboren op "+getGeboortedatum()+" null";
+
+        }
         if(getTussenvoegsel()==null){
             this.tussenvoegsel = "";
         }
-        String s = "reiziger "+ getId()+" : "+ getVoorletters()+" "+getTussenvoegsel()+" "+getAchternaam()+" geboren op "+getGeboortedatum();
+        else{
+        s = "reiziger "+ getId()+" : "+ getVoorletters()+" "+getTussenvoegsel()+" "+getAchternaam()+" geboren op "+getGeboortedatum()+adress;
+
+        }
         return s;
     }
 }

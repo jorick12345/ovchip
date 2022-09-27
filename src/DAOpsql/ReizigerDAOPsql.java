@@ -1,6 +1,7 @@
 package DAOpsql;
 
 import DAO.ReizigerDAO;
+import Domein.Adress;
 import Domein.Reiziger;
 
 import java.sql.*;
@@ -86,7 +87,11 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
     @Override
     public Reiziger findById(int id) {
-
+        for(Reiziger r:findAll()){
+            if(r.getId()==id){
+                return r;
+            }
+        }
 
 
         return null;
@@ -94,7 +99,18 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
     @Override
     public List<Reiziger> findByDate(String datum) {
-        return null;
+        try{
+        List lijst = new ArrayList();
+        for(Reiziger r:findAll()){
+            if(r.getGeboortedatum().equals(datum)){
+                lijst.add(r);
+            }
+        }
+        return lijst;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -106,6 +122,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             Statement st = connection.createStatement();
 
             String query = "SELECT ALL reiziger_id,voorletters,tussenvoegsel,achternaam,geboortedatum FROM reiziger";
+
 
             ResultSet rs = st.executeQuery(query);
 
@@ -121,9 +138,31 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                 String achternaam = rs.getString("achternaam");
                 Date geboortedatum = rs.getDate("geboortedatum");
 
+
+
                 Reiziger reiziger = new Reiziger(id,voorletters,tussenvoegsel,achternaam,geboortedatum);
 
+                String query1 = "SELECT adres_id,postcode,huisnummer,straat,woonplaats FROM adres WHERE reiziger_id=?";
+                PreparedStatement pst = connection.prepareStatement(query1);
+                pst.setInt(1,id);
+
+                ResultSet rs2 = pst.executeQuery();
+                if(rs2.next()){
+                int id2 = rs2.getInt("adres_id");
+                String postcode = rs2.getString("postcode");
+                String huisnummer = rs2.getString("huisnummer");
+                String straat = rs2.getString("straat");
+                String woonplaats = rs2.getString("woonplaats");
+
+                Adress adress = new Adress(id2,postcode,huisnummer,straat,woonplaats,id);
+
+                reiziger.setAdress(adress);
+
                 reizigers.add(reiziger);
+                }else {
+                    reizigers.add(reiziger);
+                }
+
             }
 
             st.close();
