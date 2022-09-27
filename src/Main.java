@@ -5,6 +5,7 @@ import DAOpsql.AdressDAOPsql;
 import DAOpsql.ReizigerDAOPsql;
 import Domein.Adress;
 import Domein.Reiziger;
+import lib.Conn;
 
 import java.sql.*;
 import java.util.List;
@@ -14,19 +15,19 @@ public class Main {
     public static void main(String [] args){
 
 
-        String url = "jdbc:postgresql://localhost/ovchip?user=postgres&password=postgres";
+        Connection conn = Conn.getConnection();
         try {
-            Connection conn = DriverManager.getConnection(url);
             ReizigerDAO rdao = new ReizigerDAOPsql(conn);
 
             AdressDAO adao = new AdressDAOPsql(conn);
             testReizigerDAO(rdao,adao);
 
-            conn.close();
+            Conn.closeConnection(conn);
 
         }catch (SQLException ex){
             System.err.println("error"+ex.getMessage());
         }
+
 
 
 
