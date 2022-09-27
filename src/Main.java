@@ -14,7 +14,7 @@ public class Main {
     public static void main(String [] args){
 
 
-        String url = "jdbc:postgresql://localhost/ovchip?user=postgres&password=jaloe43287990";
+        String url = "jdbc:postgresql://localhost/ovchip?user=postgres&password=postgres";
         try {
             Connection conn = DriverManager.getConnection(url);
             ReizigerDAO rdao = new ReizigerDAOPsql(conn);
