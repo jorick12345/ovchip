@@ -1,7 +1,9 @@
 package Domein;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Reiziger {
 
@@ -13,12 +15,17 @@ public class Reiziger {
 
     private Adress adress;
 
+    private List<Ovchipkaart> ovchipkaarten;
+
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
         this.id = id;
         this.voorletters = voorletters;
         this.tussenvoegsel = tussenvoegsel;
         this.achternaam = achternaam;
         this.geboortedatum = geboortedatum;
+    }
+    public Reiziger(int id){
+        this.id=id;
     }
 
     public int getId() {
@@ -67,6 +74,14 @@ public class Reiziger {
 
     public Adress getAdress() {
         return adress;
+    }
+
+    public List<Ovchipkaart> getOvchipkaarten() {
+        return ovchipkaarten;
+    }
+
+    public void setOvchipkaarten(List<Ovchipkaart> ovchipkaarten) {
+        this.ovchipkaarten = ovchipkaarten;
     }
 
     public String toString(){

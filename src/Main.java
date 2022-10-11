@@ -1,9 +1,12 @@
 
 import DAO.AdressDAO;
+import DAO.OvchipkaartDAO;
 import DAO.ReizigerDAO;
 import DAOpsql.AdressDAOPsql;
+import DAOpsql.OvchipkaartDAOpsql;
 import DAOpsql.ReizigerDAOPsql;
 import Domein.Adress;
+import Domein.Ovchipkaart;
 import Domein.Reiziger;
 import lib.Conn;
 
@@ -20,7 +23,10 @@ public class Main {
             ReizigerDAO rdao = new ReizigerDAOPsql(conn);
 
             AdressDAO adao = new AdressDAOPsql(conn);
-            testReizigerDAO(rdao,adao);
+//            testReizigerDAO(rdao,adao);
+
+            OvchipkaartDAO odao = new OvchipkaartDAOpsql(conn);
+            testOvchipkaartDAO(odao);
 
             Conn.closeConnection(conn);
 
@@ -81,5 +87,41 @@ public class Main {
                 System.out.println("Test DELETE"+ rdao.delete(i));
                 }
         }
+    }
+
+    private static void testOvchipkaartDAO(OvchipkaartDAO odao) throws SQLException{
+        System.out.println("TEST ovchipkaart.save");
+        String geldigTot = "2022-05-31";
+        Ovchipkaart ovchipkaart = new Ovchipkaart(11112,java.sql.Date.valueOf(geldigTot),2,0.00,3);
+        odao.save(ovchipkaart);
+        System.out.println("TEST save geslaagd");
+        List<Ovchipkaart> kaarten = odao.findAll();
+        for(Ovchipkaart o:kaarten){
+            System.out.println(o);
+        }
+        System.out.println();
+
+        System.out.println("TEST ovchipkaart.update");
+
+        Ovchipkaart ovchipkaart1 = new Ovchipkaart(35283,java.sql.Date.valueOf(geldigTot),2,5,2);
+
+        odao.update(ovchipkaart1);
+        System.out.println("Test update geslaagd");
+        System.out.println("Test ovchipkaart.delete");
+        odao.delete(new Ovchipkaart(11112));
+        List<Ovchipkaart> kaarten2 = odao.findAll();
+        for(Ovchipkaart o2:kaarten2){
+            System.out.println(o2);
+        }
+        System.out.println();
+        System.out.println("delete geslaagd");
+        System.out.println();
+
+        System.out.println("TEST findByReiziger");
+        System.out.println(odao.findByReiziger(new Reiziger(2)));
+        System.out.println("findByReiziger geslaagd");
+
+
+
     }
 }
